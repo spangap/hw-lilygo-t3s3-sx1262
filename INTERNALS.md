@@ -1,4 +1,4 @@
-# hw-lilygo-t3s3 — INTERNALS
+# hw-lilygo-t3s3-sx1262 — INTERNALS
 
 Maintainer reference for the LilyGo T3-S3 (SX1262) board HAL. For what the
 straddle is and how to build with it, read [README.md](README.md) first.

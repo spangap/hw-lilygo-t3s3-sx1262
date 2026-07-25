@@ -1,8 +1,8 @@
-# hw-lilygo-t3s3 — board HAL straddle for the LilyGo T3-S3 (LoRa32) with SX1262.
+# hw-lilygo-t3s3-sx1262 — board HAL straddle for the LilyGo T3-S3 (LoRa32) with SX1262.
 #
 # A plain (non-buildable) board component: it doesn't decide what the device
 # DOES, it only makes the board usable by an app. The reticulous/reticulous
-# buildable adds it with `--with spangap/hw-lilygo-t3s3` and inherits the
+# buildable adds it with `--with spangap/hw-lilygo-t3s3-sx1262` and inherits the
 # board's pin map, bring-up hook and hardware kconfig.
 #
 # Owns the board HAL (esp-idf/src/t3s3.cpp: the LoRa CS park). app_main,
@@ -17,7 +17,7 @@
 # SSD1306 OLED on the board is deliberately left unwired (the platform's on-
 # device UI is colour-TFT LVGL, not a mono OLED), so this builds headless.
 schema_version: 1
-name: spangap/hw-lilygo-t3s3
+name: spangap/hw-lilygo-t3s3-sx1262
 prefix: t3s3
 firmware: esp-idf
 version: 0.0.0

@@ -1,4 +1,4 @@
-# hw-lilygo-t3s3 board HAL — an ordinary spangap component (not a buildable).
+# hw-lilygo-t3s3-sx1262 board HAL — an ordinary spangap component (not a buildable).
 #
 # Compiles the LilyGo T3-S3 board code: the LoRa CS park (t3s3.cpp). No on-device
 # UI.

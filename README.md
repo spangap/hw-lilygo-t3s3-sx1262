@@ -1,6 +1,6 @@
-# hw-lilygo-t3s3 — LilyGo T3-S3 (SX1262) board HAL
+# hw-lilygo-t3s3-sx1262 — LilyGo T3-S3 (SX1262) board HAL
 
-**hw-lilygo-t3s3** is the board-support straddle for the **LilyGo T3-S3**
+**hw-lilygo-t3s3-sx1262** is the board-support straddle for the **LilyGo T3-S3**
 (LoRa32) — an ESP32-S3 LoRa node built on the **ESP32-S3-WROOM-1(U)**
 (ESP32-S3FH4R2: 4 MB flash, 2 MB **quad** PSRAM) carrying one Semtech **SX1262**
 on its own SPI bus, plus a microSD slot on a second SPI bus. It makes the board
@@ -10,7 +10,7 @@ map and hardware tuning as Kconfig. Board reference:
 
 It is a **non-buildable** component — it decides nothing about what the device
 *does*. A buildable assembler (`reticulous/reticulous`) adds it and inherits the
-board: `spangap build reticulous/reticulous --with spangap/hw-lilygo-t3s3`. The
+board: `spangap build reticulous/reticulous --with spangap/hw-lilygo-t3s3-sx1262`. The
 mesh stack, the IP/web platform, `app_main`, the partition layout, the update
 story and the browser SPA all come from the buildable and its other straddles —
 not from here.
