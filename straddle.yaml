@@ -43,12 +43,17 @@ kconfig:
   # begins; /state then fills the rest of the real 4 MB chip. WITHOUT this the
   # floor defaults to the whole flash container, so `app` expands to fill all
   # 4 MB and NO /state partition exists (the device has nowhere to store user
-  # data). At a 3.5 MB floor the reticulous binary (~2.6 MB with the SD/FAT
-  # driver) fits the app slot below it while /state keeps ~512 KB; bulk data
-  # belongs on the microSD card, not /state. Changing this relocates /state →
+  # data).
+  #
+  # The floor is the region `app` and `fixed` (the packed browser bundle, ~704
+  # KB) divide between them, and on a 4 MB chip those two are what binds: a
+  # 3.75 MB floor is the least that fits the reticulous binary next to `fixed`,
+  # and it leaves /state 256 KB. That is enough here because the board carries
+  # a microSD slot — bulk data belongs on the card, not in /state — so the
+  # flash is better spent on firmware. Changing this relocates /state →
   # existing devices factory-reset on the next boot, so warn users before
   # bumping it.
-  - CONFIG_SPANGAP_MAX_FIRMWARE_KB=3584
+  - CONFIG_SPANGAP_MAX_FIRMWARE_KB=3840
   - CONFIG_SPIRAM_MODE_QUAD=y
   # One SX1262 LoRa modem on its own SPI bus (SPI2/FSPI), separate from both the
   # flash bus and the SD card's bus. Pins per the LilyGo T3-S3 SX1262 pin map

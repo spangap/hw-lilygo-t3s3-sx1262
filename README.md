@@ -48,7 +48,7 @@ your actual unit before an RF or partition run:
 - **LoRa pin map.** Taken from the `tlora_t3s3_v1` variant. Re-check every
   `CONFIG_LORA*` pin if your unit is a different T3-S3 revision.
 - **Flash size.** 4 MB / 2 MB quad PSRAM (ESP32-S3FH4R2). 4 MB is tight — the
-  firmware floor leaves only ~512 KB for `/state` and no room for an A/B OTA
+  firmware floor leaves only 256 KB for `/state` and no room for an A/B OTA
   pair. If your unit carries a larger module, bump `CONFIG_ESPTOOLPY_FLASHSIZE_*`
   and `CONFIG_SPANGAP_MAX_FIRMWARE_KB` together.
 
@@ -123,7 +123,7 @@ straddle / IDF:
 | Key | Value | Why |
 |---|---|---|
 | `CONFIG_ESPTOOLPY_FLASHSIZE_4MB` | `y` | 4 MB flash (ESP32-S3FH4R2) — **verify** |
-| `CONFIG_SPANGAP_MAX_FIRMWARE_KB` | `3584` | state floor at 3.5 MB: the ~2.6 MB reticulous binary (with the SD/FAT driver) fits the `app` slot below it with ~572 KB margin; `/state` keeps the remaining ~512 KB. Without it `app` eats all 4 MB — leaving **no `/state`** |
+| `CONFIG_SPANGAP_MAX_FIRMWARE_KB` | `3840` | state floor at 3.75 MB: the reticulous binary (with the SD/FAT driver) fits the `app` slot alongside the ~704 KB `fixed` partition below it; `/state` keeps the remaining 256 KB, which is enough because bulk data belongs on the microSD card. Without it `app` eats all 4 MB — leaving **no `/state`** |
 | `CONFIG_SPIRAM_MODE_QUAD` | `y` | the S3FH4R2 carries 2 MB PSRAM in **quad** mode, not octal |
 
 The platform's usual "octal PSRAM" assumption (the T-Deck's S3R8) does **not**

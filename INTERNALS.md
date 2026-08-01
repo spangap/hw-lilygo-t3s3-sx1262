@@ -72,8 +72,8 @@ ignored under `--with`. So the hardware profile lives entirely in
 fragments. Three groups:
 
 - **Memory** — `CONFIG_ESPTOOLPY_FLASHSIZE_4MB`, `CONFIG_SPIRAM_MODE_QUAD`,
-  `CONFIG_SPANGAP_MAX_FIRMWARE_KB=3584`. The firmware floor keeps a `/state`
-  partition alive on the 4 MB chip (~512 KB; bulk data belongs on the SD card).
+  `CONFIG_SPANGAP_MAX_FIRMWARE_KB=3840`. The firmware floor keeps a `/state`
+  partition alive on the 4 MB chip (256 KB; bulk data belongs on the SD card).
 - **LoRa** — the `CONFIG_LORA*` pins and radio flags, owned by
   [iface-lora](../iface-lora).
 - **SD card** — the `CONFIG_SPANGAP_SDCARD*` pins and bus selection, owned by
@@ -90,9 +90,11 @@ to confirm on real hardware:
 
 - **Radio variant** — the profile assumes an **SX1262**. An SX1276/SX1280 unit
   will not initialise with these flags (see §3).
-- **4 MB flash is tight.** The firmware floor sits at 3.5 MB, so `/state` gets
-  only ~512 KB and there is no room for an A/B OTA pair. If your module is
-  larger, raise the flash-size and firmware-floor Kconfig together.
+- **4 MB flash is tight.** The firmware floor sits at 3.75 MB — the least that
+  fits the reticulous binary next to the ~704 KB `fixed` partition it shares the
+  region with — so `/state` gets only 256 KB and there is no room for an A/B OTA
+  pair. If your module is larger, raise the flash-size and firmware-floor Kconfig
+  together.
 - **Internal-DRAM headroom.** Quad PSRAM plus WiFi/lwIP plus the SD bounce buffer
   all draw on the internal pool; watch for `ESP_ERR_NO_MEM` under a busy
   WiFi + SD workload, as on other quad-PSRAM boards.
