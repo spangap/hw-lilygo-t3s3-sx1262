@@ -4,8 +4,8 @@
  * The T3-S3 (LoRa32) is an ESP32-S3 LoRa node built on the ESP32-S3-WROOM-1(U)
  * (ESP32-S3FH4R2: 4 MB flash, 2 MB *quad* PSRAM). This straddle targets the
  * SX1262 (sub-GHz SX126x) radio variant, on its own SPI bus, plus the board's
- * microSD slot on a second SPI bus. The 0.96" SSD1306 OLED is left unwired (the
- * "no LCD for now" build — the platform's on-device UI is colour-TFT LVGL). See
+ * microSD slot on a second SPI bus. The 0.96" SSD1306 OLED is wired as a paged
+ * status display via spangap/tinylcd (pins published in straddle.yaml). See
  * t3s3.cpp for the implementation and the board reference:
  * https://wiki.lilygo.cc/products/t3-series/t3-s3/
  *
@@ -30,8 +30,8 @@
  * hardware bring-up: it parks the LoRa radio's CS line HIGH so the SX1262
  * doesn't drive MISO before the LoRa interface claims it. It runs in the start
  * band, before spangapInit() (and so before fs_mount_sd() touches the separate
- * SD bus). There is no on-device UI in this build, so there is no onInit
- * companion.
+ * SD bus). There is no onInit companion — the OLED UI is tinylcd's own
+ * service, not a board hook.
  */
 class T3s3Board : public Service {
 public:

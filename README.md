@@ -15,10 +15,12 @@ mesh stack, the IP/web platform, `app_main`, the partition layout, the update
 story and the browser SPA all come from the buildable and its other straddles —
 not from here.
 
-This straddle targets the **SX1262** (sub-GHz SX126x) radio variant. It brings up
-**LoRa + microSD** and builds **headless**: the board's 0.96" SSD1306 OLED is
-deliberately left unwired (the platform's on-device UI is colour-TFT LVGL, not a
-mono OLED), so nothing pulls in `spangap-lcd`.
+This straddle targets the **SX1262** (sub-GHz SX126x) radio variant. It brings
+up **LoRa + microSD + the 0.96" SSD1306 OLED**, the latter as a paged status
+display via [tinylcd](../tinylcd) (staged by this board through
+`additional_installs`, pins fed through a gated `kconfig:` group); the BOOT
+button (GPIO 0) advances the page. The colour-TFT UI (`spangap-lcd`) stays out
+— the OLED is tinylcd's mono paged UI, not LVGL.
 
 ## Which T3-S3 — radio variants
 
@@ -65,10 +67,11 @@ board comes up automatically.
 `onStart` runs in the `start:` band, **before** `spangapInit()`. It is
 bare-hardware bring-up: it parks the SX1262's CS line HIGH so the radio does not
 drive MISO before `loraInit()` (in [iface-lora](../iface-lora)) claims the pin.
-There is no `init:`-band companion — there is no on-device UI in this build. The
-microSD card is mounted by `spangapInit()`'s `fs_mount_sd()` (it sits on its own
-SPI bus, so its CS needs no pre-park). The board has no gated peripheral power
-rail (unlike the Heltec V4's Vext), so there is nothing else to power up at boot.
+There is no `init:`-band companion — the OLED UI is [tinylcd](../tinylcd)'s own
+service, not a board hook. The microSD card is mounted by `spangapInit()`'s
+`fs_mount_sd()` (it sits on its own SPI bus, so its CS needs no pre-park). The
+board has no gated peripheral power rail (unlike the Heltec V4's Vext), so there
+is nothing else to power up at boot.
 
 The LoRa radio engine, the IP/web platform and the mesh stack are owned by other
 straddles ([iface-lora](../iface-lora), [spangap-core](../spangap-core),
@@ -107,11 +110,12 @@ The SX1262 drives **DIO2** as its own RF antenna switch
 On its own SPI bus (**host 3**), separate from the radio's — so no bus
 arbitration with LoRa. Mounted at boot when `CONFIG_SPANGAP_SDCARD=y`.
 
-### On-board peripherals present but NOT wired here (for reference)
+### OLED + page button (owned by tinylcd, pins published here)
 
 | Signal | GPIO | Notes |
 |---|---|---|
-| OLED SDA / SCL | 18 / 17 | 0.96" SSD1306 128×64 (mono; platform UI is colour-TFT) |
+| OLED SDA / SCL | 18 / 17 | 0.96" SSD1306 128×64, address 0x3C, no reset line |
+| page button (BOOT) | 0 | click = next status page; 500 ms hold = screen off; press wakes a dark screen |
 
 ### Memory / flash (published from `kconfig:`)
 
@@ -143,6 +147,8 @@ This board defines no storage keys of its own. Runtime LoRa parameters live at
   SD mount, ITS).
 - [iface-lora](../iface-lora) — owns the SX1262 radio engine; this board parks
   its CS and supplies its pins via Kconfig.
+- [tinylcd](../tinylcd) — staged by this board (`additional_installs`); owns
+  the OLED paged UI and the page button, pins supplied via Kconfig.
 
 ## Read next
 
