@@ -78,6 +78,28 @@ straddles ([iface-lora](../iface-lora), [spangap-core](../spangap-core),
 [spangap-net](../spangap-net), [rns](../rns)); this board only supplies the
 SX1262's pins (below), the SD pins and the CS glue.
 
+## Board identity (`detect_hw`)
+
+`esp-idf/src/detect.cpp` answers one question about this board: it returns
+`"hw-lilygo-t3s3-sx1262"` when the hardware under the firmware is this board, and NULL when
+it is not. What it asks:
+
+4 MB flash, then the OLED acking on 18/17, and the radio must read as an
+**SX1262** — the modem is what names the straddle here, so the same PCB carrying
+an LR1121 or an SX1280 answers NULL and gets its own board straddle. Passive
+reads only; no rail is driven, which is why this board is probed before the ones
+that drive one.
+
+spangap-core calls it before the first `onStart()` — the last moment no bus is
+claimed — and **halts the device awake** when the answer disagrees with the board
+this image was built for, since every pin map here would then belong to someone
+else's hardware. The confirmed answer is published as `sys.hw` and announced on
+the console as `build: hw hw-lilygo-t3s3-sx1262`. flashmon's standalone detector carries a
+hand-kept copy of the same function, renamed `detect_hw_lilygo_t3s3_sx1262`, to identify a chip
+whose firmware is unknown; change one, change the other. See
+[spangap-core/docs/init.md](../spangap-core/docs/init.md) and
+[flashmon/docs/detect.md](../flashmon/docs/detect.md).
+
 ## Hardware & pin map
 
 LilyGo **T3-S3** — ESP32-S3-WROOM-1(U) module (4 MB flash, 2 MB **quad** PSRAM,
