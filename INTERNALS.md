@@ -3,7 +3,7 @@
 Maintainer reference for the LilyGo T3-S3 (SX1262) board HAL. For what the
 straddle is and how to build with it, read [README.md](README.md) first.
 
-## 1. Bring-up: the CS park, and why it runs in the `start:` band
+## 1. Bring-up: the chip-select park, and why it runs in the `start:` band
 
 The only firmware this straddle owns is `T3s3Board::onStart`
 ([esp-idf/src/t3s3.cpp](esp-idf/src/t3s3.cpp)). It configures the SX1262's
@@ -16,7 +16,7 @@ be parked before any SPI bus setup touches those pins. The dispatcher that calls
 it is generated into the `reticulous/reticulous` buildable from this straddle's
 `services:` declaration — there is no hand-written `app_main` here.
 
-The CS park is guarded by `#if defined(CONFIG_LORA0_CS_PIN)`, so the source still
+The chip-select park is guarded by `#if defined(CONFIG_LORA0_CS_PIN)`, so the source still
 compiles if the board is ever staged without `iface-lora` (the symbol is defined
 only when that straddle is in the build).
 

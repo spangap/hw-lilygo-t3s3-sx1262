@@ -4,7 +4,7 @@
 (LoRa32) — an ESP32-S3 LoRa node built on the **ESP32-S3-WROOM-1(U)**
 (ESP32-S3FH4R2: 4 MB flash, 2 MB **quad** PSRAM) carrying one Semtech **SX1262**
 on its own SPI bus, plus a microSD slot on a second SPI bus. It makes the board
-usable by an application: it owns the LoRa CS park and publishes the board's pin
+usable by an application: it owns the LoRa chip-select park and publishes the board's pin
 map and hardware tuning as Kconfig. Board reference:
 <https://wiki.lilygo.cc/products/t3-series/t3-s3/>.
 
@@ -62,7 +62,7 @@ board comes up automatically.
 
 | Hook | Band | Present when | Brings up |
 |---|---|---|---|
-| `T3s3Board::onStart` | start | always | LoRa CS park HIGH |
+| `T3s3Board::onStart` | start | always | LoRa chip-select park HIGH |
 
 `onStart` runs in the `start:` band, **before** `spangapInit()`. It is
 bare-hardware bring-up: it parks the SX1262's CS line HIGH so the radio does not
