@@ -33,6 +33,12 @@ services:
 # OLED UI; the buildable stays display-agnostic.
 additional_installs:
   - spangap/tinylcd
+  # The SX1262 is soldered to this board, so the board stages the LoRa
+  # interface — and LoRaMon with it, which iface-lora pulls in. The buildable
+  # stays radio-agnostic the same way it stays display-agnostic.
+  # Gated on rns, because it is a Reticulum interface: a buildable that is not a
+  # Reticulum node must not inherit the mesh from the board's modem.
+  - { install: reticulous/iface-lora, when: reticulous/rns }
 # Board VALUES, fed to the symbols other straddles / IDF DEFINE through the
 # collected staging/sdkconfig.spangap-fragments. A board straddle is non-
 # buildable, so its sdkconfig.defaults would be IGNORED — everything that
@@ -64,18 +70,23 @@ kconfig:
   # flash bus and the SD card's bus. Pins per the LilyGo T3-S3 SX1262 pin map
   # (matches Meshtastic's tlora_t3s3_v1 variant). The SX1262 drives DIO2 as its
   # own RF antenna switch and DIO3 supplies the 1.8 V TCXO.
-  - CONFIG_LORA_COUNT=1
-  - CONFIG_LORA_SPI_HOST=2
-  - CONFIG_LORA_SCK_PIN=5
-  - CONFIG_LORA_MOSI_PIN=6
-  - CONFIG_LORA_MISO_PIN=3
-  - CONFIG_LORA0_CS_PIN=7
-  - CONFIG_LORA0_DIO1_PIN=33
-  - CONFIG_LORA0_BUSY_PIN=34
-  - CONFIG_LORA0_RST_PIN=8
-  - CONFIG_LORA0_TCXO_MV=1800
-  - CONFIG_LORA0_DIO2_RF_SWITCH=y
-  - CONFIG_LORA0_RADIO_SX1262=y
+  # Gated on iface-lora: the CONFIG_LORA_* symbols are DEFINED by that
+  # straddle's Kconfig, so applying these in a build without it would warn as
+  # unknown symbols.
+  - when: reticulous/iface-lora
+    set:
+      - CONFIG_LORA_COUNT=1
+      - CONFIG_LORA_SPI_HOST=2
+      - CONFIG_LORA_SCK_PIN=5
+      - CONFIG_LORA_MOSI_PIN=6
+      - CONFIG_LORA_MISO_PIN=3
+      - CONFIG_LORA0_CS_PIN=7
+      - CONFIG_LORA0_DIO1_PIN=33
+      - CONFIG_LORA0_BUSY_PIN=34
+      - CONFIG_LORA0_RST_PIN=8
+      - CONFIG_LORA0_TCXO_MV=1800
+      - CONFIG_LORA0_DIO2_RF_SWITCH=y
+      - CONFIG_LORA0_RADIO_SX1262=y
   # microSD card on its OWN SPI bus (SPI3/HSPI) — the T3-S3 wires the SD slot to
   # a different pin set than the radio, so it takes a separate SPI host (not the
   # shared-bus arrangement the T-Deck uses). spangapInit() calls fs_mount_sd()
