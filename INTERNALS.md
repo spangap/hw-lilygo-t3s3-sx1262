@@ -59,6 +59,10 @@ which is why they get their own straddle rather than a `when:`-gated block here:
   and SX1276 differ only in frequency coverage/bandwidth — both map to
   `CONFIG_LORA0_RADIO_SX1276`/`SX1278` with the flags above.
 - **SX128x (SX1280)** — 2.4 GHz; different DIO map and freq/bandwidth range.
+- **LR1121** — its own straddle,
+  [hw-lilygo-t3s3-lr1121](../hw-lilygo-t3s3-lr1121): same SPI, CS, RST and
+  BUSY pins, but the IRQ on GPIO 36, a 3.0 V TCXO, and an antenna switch the
+  chip drives from DIO5/DIO6.
 
 A future `hw-lilygo-t3s3-sx127x` (or a radio-variant knob) would carry that
 alternate pin/flag set; do not try to fold it into this file's `kconfig:` — the

@@ -32,6 +32,7 @@ only.** The others differ enough to warrant their own board straddle:
 | **SX1262** *(this straddle)* | SX126x | 868/915 MHz | BUSY line + DIO1 IRQ, chip-driven 1.8 V TCXO (DIO3), DIO2 as RF switch |
 | SX1276 / SX1278 | SX127x | 868/915 · 433 MHz | **No BUSY line** (set `-1`), IRQ on **DIO0**, no chip TCXO, no DIO2 switch; antenna via external RX/TX-enable GPIOs (10/21, resistor-optioned) |
 | SX1280 | SX128x | 2.4 GHz | Higher data rate, no sub-GHz; different DIO map and freq/bandwidth range |
+| LR1121 — [hw-lilygo-t3s3-lr1121](../hw-lilygo-t3s3-lr1121) | LR11x0 | 868/915 MHz + 2.4 GHz | Same SPI/BUSY/RST pins; IRQ on GPIO 36, 3.0 V TCXO, antenna switched by the chip's DIO5/DIO6 |
 
 SX1272 vs SX1276 (both SX127x) is only a frequency-coverage/bandwidth
 difference — from the firmware's view both are register-based SX127x parts
